@@ -8,14 +8,16 @@ jobs:
     name: Deploy build to TestFlight
     runs-on: macos-latest
     steps:
-      - name: Checkout code from ref
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ github.ref }}
+      - uses: actions/checkout@v3
       - name: Run Flutter tasks
-        uses: subosito/flutter-action@v1
+        uses: subosito/flutter-action@v2  #Setup ios
         with:
-          flutter-version: '2.0.6'
+          flutter-version: '3.0.0'
+          channel: 'stable'
+          cache: true
+          cache-key: flutter # optional, change this to force refresh cache
+          cache-path: ${{ runner.tool_cache }}/flutter # optional, change this to specify the cache path
+          architecture: x64 # optional, x64 or arm64
       - run: flutter clean
       - run: flutter pub get
       - run: flutter build ios --release --no-codesign
