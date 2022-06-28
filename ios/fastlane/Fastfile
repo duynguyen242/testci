@@ -3,8 +3,8 @@ default_platform(:ios)
 APPLICATON_ID = ENV["1632029735"]
 BUNDLE_IDENTIFIER = ENV["com.duynp.testci"]
 PROVISIONING_PROFILE_SPECIFIER = ENV["com.duynp.testci"]
-TEMP_KEYCHAIN_USER = ENV["duynguyen"]
-TEMP_KEYCHAIN_PASSWORD = ENV["123123"]
+TEMP_KEYCHAIN_USER = "temp"
+TEMP_KEYCHAIN_PASSWORD = "temp"
 def delete_temp_keychain(name)
   delete_keychain(
     name: name
@@ -14,19 +14,23 @@ def create_temp_keychain(name, password)
   create_keychain(
     name: name,
     password: password,
-    unlock: true,
-    timeout: 360000
+    unlock: false,
+    timeout: 0
   )
 end
 def ensure_temp_keychain(name, password)
   delete_temp_keychain(name)
   create_temp_keychain(name, password)
 end
+
 platform :ios do
   lane :beta do
+    # Step 1 - Create keychains
     keychain_name = TEMP_KEYCHAIN_USER
     keychain_password = TEMP_KEYCHAIN_PASSWORD
     ensure_temp_keychain(keychain_name, keychain_password)
+
+    # Step 2 - Download provisioning profiles and certificates
     match(
       type: 'appstore',
       app_identifier: "#{BUNDLE_IDENTIFIER}",
@@ -35,6 +39,8 @@ platform :ios do
       keychain_name: keychain_name,
       keychain_password: keychain_password
     )
+
+    # Step 3 - Build the project
     gym(
       configuration: "Release",
       workspace: "Runner.xcworkspace",
@@ -46,6 +52,8 @@ platform :ios do
         }
       }
     )
+
+    # Step 4 - Upload the project
     pilot(
       apple_id: "#{APPLICATON_ID}",
       app_identifier: "#{BUNDLE_IDENTIFIER}",
@@ -55,6 +63,8 @@ platform :ios do
       notify_external_testers: false,
       ipa: "./Runner.ipa"
     )
+
+    # Step 5 - Delete temporary keychains
     delete_temp_keychain(keychain_name)
   end
 end
