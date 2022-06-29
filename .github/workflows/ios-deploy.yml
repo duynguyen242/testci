@@ -9,10 +9,6 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.0'
-          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - name: Run Flutter tasks
         uses: subosito/flutter-action@v2  #Setup ios
         with:
@@ -25,6 +21,14 @@ jobs:
       - run: flutter clean
       - run: flutter pub get
       - run: flutter build ios --release --no-codesign
+#      - name: Setup Ruby
+#        uses: ruby/setup-ruby@v1
+#        with:
+#          ruby-version: '2.5.3'
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.0'
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - name: Deploy iOS Beta to TestFlight via Fastlane
         uses: maierj/fastlane-action@v2.2.0
         with:
