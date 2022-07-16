@@ -1,35 +1,35 @@
-name: CI
-on:
-  push:
-    branches: [ dev ]
-  pull_request:
-    branches: [ master, dev ]
-
-  workflow_dispatch:
-
-jobs:
-  build:
-    runs-on: macos-latest
-
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-java@v2 #Setup android
-        with:
-          distribution: 'zulu'
-          java-version: '11'
-      - uses: subosito/flutter-action@v2  #Setup ios
-        with:
-          flutter-version: '3.0.0'
-          channel: 'stable'
-          cache: true
-          cache-key: flutter # optional, change this to force refresh cache
-          cache-path: ${{ runner.tool_cache }}/flutter # optional, change this to specify the cache path
-          architecture: x64 # optional, x64 or arm64
-#      - run: flutter --version
-#      - run: flutter pub get
-#      - run: flutter analyze
-#      - run: flutter test
-#      - run: flutter build ios --release --no-codesign
-#      - run: flutter build apk
-#      - run: flutter build appbundle
-
+#name: CI
+#on:
+#  push:
+#    branches: [ dev ]
+#  pull_request:
+#    branches: [ master, dev ]
+#
+#  workflow_dispatch:
+#
+#jobs:
+#  build:
+#    runs-on: macos-latest
+#
+#    steps:
+#      - uses: actions/checkout@v3
+#      - uses: actions/setup-java@v2 #Setup android
+#        with:
+#          distribution: 'zulu'
+#          java-version: '11'
+#      - uses: subosito/flutter-action@v2  #Setup ios
+#        with:
+#          flutter-version: '3.0.0'
+#          channel: 'stable'
+#          cache: true
+#          cache-key: flutter # optional, change this to force refresh cache
+#          cache-path: ${{ runner.tool_cache }}/flutter # optional, change this to specify the cache path
+#          architecture: x64 # optional, x64 or arm64
+##      - run: flutter --version
+##      - run: flutter pub get
+##      - run: flutter analyze
+##      - run: flutter test
+##      - run: flutter build ios --release --no-codesign
+##      - run: flutter build apk
+##      - run: flutter build appbundle
+#
